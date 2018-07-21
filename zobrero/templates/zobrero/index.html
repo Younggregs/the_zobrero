@@ -1,0 +1,17 @@
+{% extends 'zobrero/base.html'  %}
+
+{% block body%}
+<p>Index page for the zobrero</p>
+<p>Firstname -> {{firstname}}</p>
+<p>Lastname -> {{lastname}}</p>
+<p>email -> {{email}}</p>
+<p>password -> {{password}}</p>
+<p>WhatDoYouDo -> {{whatdoyoudo}}</p>
+<p>WhatCanYouDo ->
+    </ol>
+{% for whcd in whatcanyoudo %}
+    <li>{{whcd}}</li>
+{% endfor %}
+  </ol>
+</p>
+{% endblock %}
