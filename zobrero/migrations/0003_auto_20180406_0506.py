@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import datetime
 from django.db import migrations, models
 import django.db.models.deletion
-import phonenumber_field.modelfields
 
 
 class Migration(migrations.Migration):
@@ -19,8 +18,8 @@ class Migration(migrations.Migration):
             name='Calls',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('caller', phonenumber_field.modelfields.PhoneNumberField(max_length=128)),
-                ('receiver', phonenumber_field.modelfields.PhoneNumberField(max_length=128)),
+                ('caller', models.CharField(max_length=11)),
+                ('receiver', models.CharField(max_length=11)),
                 ('date', models.DateTimeField(default=datetime.datetime.now)),
             ],
         ),
@@ -35,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='account',
             name='phone',
-            field=phonenumber_field.modelfields.PhoneNumberField(default=1920, max_length=128),
+            field=models.CharField(default=123, max_length=11),
         ),
         migrations.AlterField(
             model_name='account',
