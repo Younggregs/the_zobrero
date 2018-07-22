@@ -176,13 +176,18 @@ class Appointment(models.Model):
 class AppointmentDetail(models.Model):
     appointment = models.ForeignKey(Appointment)
     task = models.ForeignKey(Talent)
-    appm_date = models.DateField()
-    appm_time = models.TimeField()
+    description = models.TextField(default="description")
+    appointment_date = models.CharField(default="1/8", max_length=20)
+    appointment_time = models.CharField(default="12:00:00am", max_length=20)
 
 
 class Status(models.Model):
     status = models.CharField(max_length=100)
     date = models.DateTimeField(default = timezone.now)
+
+    def __str__(self):
+
+        return self.status
     
 
 

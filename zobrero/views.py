@@ -16,8 +16,8 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Account, Category, Talent, Employee, WhatDoYouDo, WhatCanYouDo, RecentActivity, TopRated, WhatsNew, Chat, Messenger
-from .serializers import AccountSerializer, AddAccountSerializer, SignInSerializer, CategorySerializer, TalentSerializer,EmployeeListSerializer, SearchSerializer, ErrorMessageSerializer, SuccessCodeSerializer, RecentActivitySerializer, TopRatedSerializer, WhatsNewSerializer, ChatClientSerializer, MessageSerializer
+from .models import Account, Category, Talent, Employee, WhatDoYouDo, WhatCanYouDo, RecentActivity, TopRated, WhatsNew, Chat, Messenger, Status, Appointment, AppointmentDetail, AppointmentStatus
+from .serializers import AccountSerializer, AddAccountSerializer, SignInSerializer, CategorySerializer, TalentSerializer,EmployeeListSerializer, SearchSerializer, ErrorMessageSerializer, SuccessCodeSerializer, RecentActivitySerializer, TopRatedSerializer, WhatsNewSerializer, ChatClientSerializer, MessageSerializer, StatusSerializer
 
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -1427,8 +1427,6 @@ class UnreadMessages(APIView):
             user = User.objects.get(username = request.user)
             email = user.username
 
-        else:
-            email = 'dretzam@gmail.com'
 
         account = Account.objects.get( email = email )
         account_id = account.id
@@ -1470,6 +1468,129 @@ class UnreadMessages(APIView):
 
 
 
+class StatusView(APIView):
+
+    def get(self, request):
+        
+        status = Status.objects.all()
+
+        serializer = StatusSerializer(status, many=True)
+
+        return Response(serializer.data)
+
+    
+    def post(self,request):
+        pass
 
 
 
+
+
+
+
+
+
+class AppointmentView(APIView):
+
+    def get(self, request, client_id):
+        pass
+
+    
+    def post(self, request, client_id):
+        
+          
+        if request.user.is_authenticated:
+            user = User.objects.get(username = request.user)
+            email = user.username
+
+        account = Account.objects.get( email = email )
+        account_id = account.id
+
+        
+        try :
+            client = Account.objects.get(id = client_id)
+            client_id_ = client.id
+
+            employee = Employee.objects.get(account = '9')
+
+        except:
+
+            message = "Invalid employee account"
+            err = {
+                'message' : message
+            }
+
+            serializer = ErrorMessageSerializer(err, many=False)
+
+            return Response(serializer.data)
+
+
+
+        task = request.POST.get("task","")
+        description = request.POST.get("description","")
+        month = request.POST.get("month", "")
+        day = request.POST.get("day","")
+        time = request.POST.get("time","")
+        oclock = request.POST.get("oclock","")
+
+        appointment_date = month + '/' + day
+        appointment_time = time + oclock
+
+        appointment = Appointment()
+        appointment.employer = account
+        appointment.employee = employee
+        appointment.save()
+
+        talent_task = Talent.objects.get(id = task)
+
+        appointmentDetail = AppointmentDetail()
+        appointmentDetail.appointment = appointment
+        appointmentDetail.task = talent_task
+        appointmentDetail.description = description
+        appointmentDetail.appointment_date = appointment_date
+        appointmentDetail.appointment_time = appointment_time
+        appointmentDetail.save()
+
+        status = Status.objects.get(id = '1')
+
+        appointmentStatus = AppointmentStatus()
+        appointmentStatus.appointment = appointment
+        appointmentStatus.status = status
+        appointmentStatus.reason = ""
+        appointmentStatus.save()
+
+
+        code = 11
+
+        success = {
+            'code' : code
+        }
+
+        serializer = SuccessCodeSerializer(success, many=False)
+
+        return Response(serializer.data)
+
+
+
+
+
+
+
+class GetAccountName(APIView):
+
+    def get(self, request, account_id):
+        
+        try :
+            account = Account.objects.get(id = account_id)
+            name = account.firstname + ' ' + account.lastname
+
+            return Response(name)
+
+        except :
+
+            err = "Invalid account"
+            return Response(err)
+
+    
+    def post(self, request, account_id):
+        pass

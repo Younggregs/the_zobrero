@@ -80,5 +80,14 @@ urlpatterns = [
     #zobrero/send_message
     url(r'^send_message/(?P<client_id>[0-9]+)/$',views.SendMessage.as_view(), name = 'send-message'),
 
+    #zobrero/status
+    url(r'^status/$',views.StatusView.as_view(), name = 'status-view'),
+
+    #zobrero/getaccount_name
+    url(r'^getaccount_name/(?P<account_id>[0-9]+)/$',views.GetAccountName.as_view(), name = 'get-account-name'),
+
+    #zobrero/appointment
+    url(r'^appointment/(?P<client_id>[0-9]+)/$',views.AppointmentView.as_view(), name = 'appointment-view'),
+
 
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, WhatDoYouDo, WhatCanYouDo, WhatHaveYouDone, Category, Talent, Employee, WhatsNew
+from .models import Account, WhatDoYouDo, WhatCanYouDo, WhatHaveYouDone, Category, Talent, Employee, WhatsNew, Status
 
 class AccountSerializer(serializers.ModelSerializer):
 
@@ -92,9 +92,7 @@ class WhatsNewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WhatsNew
-        field = '__all__'
-
-
+        fields = '__all__'
 
 
 
@@ -111,3 +109,12 @@ class MessageSerializer(serializers.Serializer):
 
     msg = serializers.CharField()
     from_or_to = serializers.BooleanField()
+
+
+
+
+class StatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Status
+        fields = '__all__'
